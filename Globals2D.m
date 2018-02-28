@@ -12,7 +12,7 @@ global rk4a rk4b rk4c
 global Nfaces EToE EToF EToV
 global V invV T 
 global x y NODETOL VX VY
-global Cq1 m
+global CM M PNM CqM
 % Some curved mesh and cubature quadrature specific data
 global cub gauss straight curved
 

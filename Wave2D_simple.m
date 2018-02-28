@@ -6,7 +6,7 @@ Globals2D
 N = 4;
 K1D = 16;
 c_flag = 0;
-FinalTime = 0.5;
+FinalTime = 3;
 %cfun = @(x,y) ones(size(x));
  cfun = @(x,y)  .5*sin(pi*x).*sin(pi*y); % smooth velocity
  %cfun = @(x,y) (1 + .5*sin(2*pi*x).*sin(2*pi*y) + (y > 0)); % piecewise smooth velocity
@@ -73,7 +73,7 @@ while (time<FinalTime)
     if 1 && nargin==0 && mod(tstep,10)==0
         clf
         vv = Vp*p;
-        plot3(xp,yp,vv,'.');
+        color_line3(xp,yp,vv,vv,'.');
         axis equal
         axis tight
         colorbar

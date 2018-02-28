@@ -1,17 +1,22 @@
 clear
-kd=[4 8 16 32];
+kd=[4 8 16 32 64];
 h = 2./kd;
 for i=1:length(kd)
 
 Globals2D
-N=4;
+N=7;
+M=5;
 %K1D = 16;
 K1D = kd(i);
 c_flag = 0;
-FinalTime = 0.5;
-%cfun = @(x,y) ones(size(x));
-cfun = @(x,y) 1+0.5*sin(pi*x).*cos(pi*y); % smooth velocity
-%cfun = @(x,y) (1 + .5*sin(2*pi*x).*sin(2*pi*y) + (y > 0)); % piecewise smooth velocity
+FinalTime = 5.0;
+
+cfun = @(x,y) 1 + 0.5*sin(pi*x).*sin(pi*y); % smooth velocity
+% manufactured solution
+ffun = @(x,y,t)  pi*(-1./(cfun(x,y))+2).*sin(pi*x).*sin(pi*y).*sin(pi*t);
+pfun = @(x,y,t) sin(pi*x).*sin(pi*y).*cos(pi*t);
+ufun = @(x,y,t) -cos(pi*x).*sin(pi*y).*sin(pi*t);
+vfun = @(x,y,t) -sin(pi*x).*cos(pi*y).*sin(pi*t);
 
 [Nv, VX, VY, K, EToV] = unif_tri_mesh(K1D);
 
@@ -33,8 +38,8 @@ xq = Vq*x; yq = Vq*y;
 Pq=V*V'*Vq'*diag(wq);
 
 %% construct projection matrices for degree 1
-V1 = Vandermonde2D(1,rq,sq);
-
+V1 = Vandermonde2D(M,rq,sq);
+V2 = Vandermonde2D(M,r,s);
 Pq1 = V1 * V1' *diag(wq); %Pq1 * Cq will give the projected function values at quadrature points
 
 %% construct the matrix C, function values at quadrature points
@@ -42,24 +47,14 @@ Cq = cfun(xq,yq);
 Cq1 = Pq1*Cq;
 
 %% initial condition
-
-x0 = 0; y0 = .1;
-p = exp(-25*((x-x0).^2 + (y-y0).^2));
-u = zeros(Np, K);
-v=zeros(Np,K);
-
-
-%% construct the comparison
-p1 = p;
-u1 = u;
-v1 = v;
+p = pfun(x,y,0);
+u = ufun(x,y,0);
+v = vfun(x,y,0);
 
 time = 0;
 
 % Runge-Kutta residual storage
 resu = zeros(Np,K); resv = zeros(Np,K); resp = zeros(Np,K);
-
-resu1 = resu; resv1 = resv; resp1 = resp;
 
 % compute time step size
 CN = (N+1)*(N+2)/2; % trace inequality constant
@@ -74,37 +69,28 @@ while (time<FinalTime)
     
     for INTRK = 1:5
         
-        timelocal = time + rk4c(INTRK)*dt;E = invV * (p-p1);
+        timelocal = time + rk4c(INTRK)*dt;
+        f=ffun(x,y,timelocal);
+        [rhsp, rhsu, rhsv] = acousticsRHS2D_manu(p,u,v,f);
         
-        [rhsp, rhsu, rhsv] = acousticsRHS2D_WADG(p,u,v);
-        [rhsp1, rhsu1,rhsv1] = acousticsRHS2D_WADG1(p1,u1,v1);
-        
-        % initiate and increment xlabel('K1D')
-ylabel('difference')Runge-Kutta residuals
+        % initiate and increment Runge-Kutta residuals
         resp = rk4a(INTRK)*resp + dt*rhsp;
         resu = rk4a(INTRK)*resu + dt*rhsu;
         resv = rk4a(INTRK)*resv + dt*rhsv;
-        
-        resp1 = rk4a(INTRK)*resp1 + dt*rhsp1;
-        resu1 = rk4a(INTRK)*resu1 + dt*rhsu1;
-        resv1 = rk4a(INTRK)*resv1 + dt*rhsv1;
         
         % update fields
         u = u+rk4b(INTRK)*resu;
         v = v+rk4b(INTRK)*resv;
         p = p+rk4b(INTRK)*resp;
-        
-        u1 = u1+rk4b(INTRK)*resu1;
-        v1 = v1+rk4b(INTRK)*resv1;
-        p1 = p1+rk4b(INTRK)*resp1;
     end
     time = time+dt; tstep = tstep+1;
 end
-    E = invV * (p-p1);
-    ae(i) = norm(E.*J,'fro');
+    p_final = pfun(x,y,FinalTime);
+    ae(i) = norm(p-p_final);
 end 
-l = [1:5];
 loglog(h,ae)
 title('Plot of difference as mesh varies ')
-xlabel('K1D')
+xlabel('h')
 ylabel('difference')
+hold on 
+%loglog(h,h.^3)
