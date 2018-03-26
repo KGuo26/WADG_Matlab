@@ -29,6 +29,6 @@ rhsp =  -divU + f + LIFT*(Fscale.*fluxp)/2.0;
 rhsu =  -dpdx + LIFT*(Fscale.*fluxu)/2.0;
 rhsv =  -dpdy + LIFT*(Fscale.*fluxv)/2.0;
 
-rhsp = Pq*(Cq1.*(Vq*rhsp));
+rhsp = Pq*(CM.*(Vq*rhsp));
 return;
 

@@ -3,7 +3,7 @@
 global Np Nfp N K
 global VX VY VZ
 global r s t
-global Dr Ds Dt LIFT Drw Dsw Dtw Cq Vq Pq  c_BB mD
+global Dr Ds Dt LIFT Drw Dsw Dtw Cq Vq Pq CqM
 global Fx Fy Fz nx ny nz Fscale sJ
 global vmapM vmapP vmapB mapB Fmask
 global BCType mapI mapO mapW mapF mapC mapS mapM mapP mapD mapN
@@ -13,8 +13,7 @@ global rk4a rk4b rk4c
 global Nfaces EToE EToF EToV
 global V invV
 global x y z NODETOL
-global TB 
-global D0 D1 D2 D3
+
 In = 1; Out = 2; Wall = 3; Far = 4; Cyl = 5; Dirichlet = 6; Neuman = 7; Slip = 8;
 
 % Low storage Runge-Kutta coefficients

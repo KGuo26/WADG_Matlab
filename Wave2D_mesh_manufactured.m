@@ -1,15 +1,15 @@
 clear
 Globals2D
 
-kd=[4 8 16 32 64]
+kd=[64]
 h=2./kd
 N = 4;
-M = 0;
+M = 1;
 k = 16
 for i = 1:length(kd)
 
 K1D = kd(i);
-FinalTime = 1.0;
+FinalTime = 1.5;
 [Nv, VX, VY, K, EToV] = unif_tri_mesh(K1D);
 StartUp2D;
 
@@ -19,7 +19,7 @@ cfun = @(x,y) 1+ 0.5*sin(pi*x).*sin(pi*y); % smooth velocity
 %cfun = @(x,y) (1 + .5*sin(2*pi*x).*sin(2*pi*y) + (y > 0)); % piecewise smooth velocity
 
 %% Set periodic manufactured solution
-pfun = @(x,y,t) sin(k*pi*x).*sin(k*pi*y).*cos(k*pi*t);
+pfun = @(x,y,t)  sin(k*pi*x).*sin(k*pi*y).*cos(k*pi*t);
 ufun = @(x,y,t) -cos(k*pi*x).*sin(k*pi*y).*sin(k*pi*t);
 vfun = @(x,y,t) -sin(k*pi*x).*cos(k*pi*y).*sin(k*pi*t);
 ffun = @(x,y,t)  k*pi*(-1./(cfun(x,y))+2).*sin(k*pi*x).*sin(k*pi*y).*sin(k*pi*t);
@@ -78,6 +78,9 @@ while (time<FinalTime)
         u = u+rk4b(INTRK)*resu;
         v = v+rk4b(INTRK)*resv;
         p = p+rk4b(INTRK)*resp;
+       
+        
+        
         
     end
     

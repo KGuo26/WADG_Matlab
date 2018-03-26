@@ -14,7 +14,7 @@ cfun = @(x,y) 1 + 0.5*sin(pi*x).*sin(pi*y); % smooth velocity
 %ffun = @(x,y,t)  pi*(-1./(1+0.5*sin(pi*x).*sin(pi*y))+2).*sin(pi*x).*sin(pi*y).*sin(pi*t);
 ffun = @(x,y,t)  pi*(-1./(cfun(x,y))+2).*sin(pi*x).*sin(pi*y).*sin(pi*t);
 %ffun = @(x,y,t) pi*sin(pi*x).*sin(pi*y).*sin(pi*t);
-pfun = @(x,y,t) sin(pi*x).*sin(pi*y).*cos(pi*t);
+pfun = @(x,y,t)  sin(pi*x).*sin(pi*y).*cos(pi*t);
 ufun = @(x,y,t) -cos(pi*x).*sin(pi*y).*sin(pi*t);
 vfun = @(x,y,t) -sin(pi*x).*cos(pi*y).*sin(pi*t);
 

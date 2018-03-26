@@ -14,13 +14,6 @@ V = Vandermonde3D(N,r,s,t); invV = inv(V);
 MassMatrix = invV'*invV;
 [Dr,Ds,Dt] = Dmatrices3D(N, r, s, t, V);
 
-% Build BB matrices
-[TB, VBr, VBs, VBt, D0, D1, D2, D3] = bern_tet(N,r,s,t);
-D0 = mldivide(TB,D0);
-D1 = mldivide(TB,D1);
-D2 = mldivide(TB,D2);
-D3 = mldivide(TB,D3);
-%disp(TB)
 % build coordinates of all the nodes
 va = EToV(:,1)'; vb = EToV(:,2)'; vc = EToV(:,3)'; vd = EToV(:,4)';
 x = 0.5*(-(1+r+s+t)*VX(va)+(1+r)*VX(vb)+(1+s)*VX(vc)+(1+t)*VX(vd));

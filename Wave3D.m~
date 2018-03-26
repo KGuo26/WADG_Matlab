@@ -18,7 +18,7 @@ cfun = @(x,y,z) ones(size(x));
  ffun = @(x,y,z,t)   pi*2*sin(pi*x).*sin(pi*y).*sin(pi*z).*sin(pi*t);
 
 %generate 3D mesh
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGmsh3D('cube2.msh');
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGmsh3D('cube1.msh');
 
 StartUp3D;
 

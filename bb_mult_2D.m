@@ -10,7 +10,7 @@ N2 = 1;
 Vq = bern_basis_tri(N,rq,sq);
 Vq2 = bern_basis_tri(N+N2,rq,sq);
 
-% we may wish to rescale the representations of the weighting functionb
+% we may wish to rescale the representations of the weighting function
 % basis to reduce numerical roundoff. 
 VM = bern_basis_tri(N2,rq,sq); 
 
