@@ -2,7 +2,7 @@ clear
 
 Globals3D;
 
-N = 3;
+N = 4;
 FinalTime = 1;
 cfun = @(x,y,z) ones(size(x));
 %cfun = @(x,y,z) 1 + 0.5*sin(pi*x).*sin(pi*y).*sin(pi*z); % smooth velocity
@@ -22,6 +22,9 @@ cfun = @(x,y,z) ones(size(x));
 
 StartUp3D;
 
+
+Dr(abs(Dr)<1e-8) = 0; 
+
 Nq = 2*N+1;
 
 [rq sq tq wq] = tet_cubature(Nq); % integrate u*v*c
@@ -34,7 +37,7 @@ Pq=V*V'*Vq'*diag(wq);
  
 Cq = cfun(xq,yq,zq);
 
-
+Lift3D(N, r, s, t);
 % %% Adptive m on each element
 % VMq = Vandermonde3D(M,rq,sq,tq);
 % CqM = VMq*VMq'*diag(wq)*Cq;

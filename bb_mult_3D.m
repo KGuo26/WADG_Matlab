@@ -3,9 +3,9 @@
 
 clear
 
-N = 3;
+N = 3   ;
 N2 = 1;
-[re se te] = EquiNodes3D(N+N2                             ); [re se te] = xyztorst(re,se,te);
+[re se te] = EquiNodes3D(N+N2); [re se te] = xyztorst(re,se,te);
 [rq sq  tq wq] = tet_cubature(3*(N+N2));
 Vq = bern_basis_tet(N,rq,sq,tq);
 Vq2 = bern_basis_tet(N+N2,rq,sq,tq);
